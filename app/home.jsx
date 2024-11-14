@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from "react-native";
 import AvatarImg from "../assets/images/img1.png";
 import { useRouter } from "expo-router";
@@ -23,33 +24,88 @@ export default function home() {
         padding: 20,
       }}
     >
-      <View style={{ flexDirection: "row", gap: 10 }}>
-        <TouchableOpacity onPress={() => router.navigate("profile")}>
-          <Avatar rounded source={AvatarImg} size={58} />
-        </TouchableOpacity>
-        <View
-          style={[
-            {
-              flexDirection: "row",
-              backgroundColor: "#f4f4f4",
-              borderRadius: 69,
-              flex: 1,
-            },
-          ]}
-        >
-          <TextInput
-            style={styles.textInput2}
-            placeholder="Search"
-            secureTextEntry={!showPassword}
-            placeholderTextColor={"#101828"}
-            returnKeyType="done"
-            maxLength={100}
-            onChangeText={(text) => setPassword(text)}
-          />
-          <View style={styles.iconView}>
-            <Ionicons name={"search-outline"} size={24} color={"#667085"} />
+      {/*upper tab */}
+      <View style={{ gap: 12 }}>
+        <View style={{ flexDirection: "row", gap: 10 }}>
+          <TouchableOpacity onPress={() => router.navigate("profile")}>
+            <Avatar rounded source={AvatarImg} size={58} />
+          </TouchableOpacity>
+          <View
+            style={[
+              {
+                flexDirection: "row",
+                backgroundColor: "#f4f4f4",
+                borderRadius: 69,
+                flex: 1,
+              },
+            ]}
+          >
+            <TextInput
+              style={styles.textInput2}
+              placeholder="Search"
+              secureTextEntry={!showPassword}
+              placeholderTextColor={"#101828"}
+              returnKeyType="done"
+              maxLength={100}
+              onChangeText={(text) => setPassword(text)}
+            />
+            <View style={styles.iconView}>
+              <Ionicons name={"search-outline"} size={24} color={"#667085"} />
+            </View>
           </View>
         </View>
+
+        <ScrollView horizontal contentContainerStyle={{ gap: 10 }}>
+          <TouchableOpacity
+            style={{
+              height: 40,
+              backgroundColor: "#f7f7f7",
+              borderRadius: 100,
+              flexDirection: "row",
+              paddingHorizontal: 17,
+              paddingVertical: 10,
+              gap: 8,
+            }}
+          >
+            <Ionicons name={"home"} size={20} color={"black"} />
+            <Text style={{ color: "black", fontSize: 16 }}>Home</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              height: 40,
+              backgroundColor: "#f7f7f7",
+              borderRadius: 100,
+              flexDirection: "row",
+              paddingHorizontal: 17,
+              paddingVertical: 10,
+              gap: 8,
+            }}
+          >
+            <Ionicons name={"briefcase"} size={20} color={"black"} />
+            <Text style={{ color: "black", fontSize: 16 }}>Office</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              height: 40,
+              backgroundColor: "#f7f7f7",
+              borderRadius: 100,
+              flexDirection: "row",
+              paddingHorizontal: 17,
+              paddingVertical: 10,
+              gap: 8,
+            }}
+          >
+            <Ionicons name={"location"} size={20} color={"black"} />
+            <Text style={{ color: "black", fontSize: 16 }}>
+              Main road street
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
+      {/*upper tab */}
+      <View style={{ marginTop: 40 }}>
+        <Text style={{ color: "black", fontSize: 16 }}>Map will show here</Text>
       </View>
     </View>
   );

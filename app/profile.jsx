@@ -254,6 +254,7 @@ export default function profile() {
             alignItems: "center",
             flexDirection: "row",
           }}
+          onPress={() => router.navigate("paymentmethod")}
         >
           <Ionicons
             name={"wallet-outline"}
