@@ -67,7 +67,7 @@ export default function onBoarding() {
             justifyContent: "center",
             width: 75,
           }}
-          onPress={() => router.navigate("login")}
+          onPress={() => router.navigate("home")}
         >
           <Text>Skip</Text>
         </TouchableOpacity>

@@ -3,12 +3,11 @@ import {
   Text,
   View,
   TouchableOpacity,
-  TextInput,
   ScrollView,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { useDispatch } from "react-redux";
 import { setDestination, setOrigin } from "../utils/navSlice";
@@ -33,13 +32,14 @@ const data = [
 ];
 
 export default function setLocation() {
+  const { Location } = useLocalSearchParams();
   const router = useRouter();
   const dispatch = useDispatch();
   const [originPlace, setOriginPlace] = useState(null);
-  const [Location, setLocation] = useState(1);
+  const [currentLocation, setCurrentLocation] = useState(null);
   const checkNavigation = () => {
     if (originPlace) {
-      if (Location === 1) {
+      if (Location === "1") {
         dispatch(setOrigin(originPlace));
       } else {
         dispatch(setDestination(originPlace));
@@ -47,7 +47,6 @@ export default function setLocation() {
       router.navigate("home");
     }
   };
-
   useEffect(() => {
     checkNavigation();
   }, [originPlace]);
@@ -78,13 +77,13 @@ export default function setLocation() {
             fontSize: 18,
           }}
         >
-          Pickup Location
+          {Location === "1" ? "Pick up Location" : "Dropoff Location"}
         </Text>
         <Ionicons name={"chevron-back"} color={"transparent"} size={24} />
       </View>
       <View style={{ gap: 12, marginTop: 20 }}>
         <GooglePlacesAutocomplete
-          placeholder={Location === 1 ? "Pick Up" : "Destination"}
+          placeholder={Location === "1" ? "Pick Up" : "Destination"}
           onPress={(data, details = null) => {
             setOriginPlace({
               name: details.formatted_address,
@@ -95,7 +94,7 @@ export default function setLocation() {
           fetchDetails={true}
           returnKeyType={"Search"}
           currentLocationLabel="Current location"
-          // currentLocation={Location === 1 ? true : false}
+          // currentLocation={Location === "1" ? true : false}
           styles={{
             container: {
               flex: 0,

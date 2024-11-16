@@ -1,129 +1,45 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-} from "react-native";
-import AvatarImg from "../assets/images/img1.png";
-import { useRouter } from "expo-router";
-import { Avatar } from "@rneui/themed";
-import { useState } from "react";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { StyleSheet, View } from "react-native";
+import BottomSheet from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import MapComp from "../components/MapComp";
+import LocationSheet from "../components/LocationSheet";
 
-export default function home() {
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
+const home = () => {
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "white",
-        padding: 20,
-      }}
-    >
-      {/*upper tab */}
-      <View style={{ gap: 12 }}>
-        <View style={{ flexDirection: "row", gap: 10 }}>
-          <TouchableOpacity onPress={() => router.navigate("profile")}>
-            <Avatar rounded source={AvatarImg} size={58} />
-          </TouchableOpacity>
-          <View
-            style={[
-              {
-                flexDirection: "row",
-                backgroundColor: "#f4f4f4",
-                borderRadius: 69,
-                flex: 1,
-              },
-            ]}
-          >
-            <TextInput
-              style={styles.textInput2}
-              placeholder="Search"
-              secureTextEntry={!showPassword}
-              placeholderTextColor={"#101828"}
-              returnKeyType="done"
-              maxLength={100}
-              onChangeText={(text) => setPassword(text)}
-            />
-            <View style={styles.iconView}>
-              <Ionicons name={"search-outline"} size={24} color={"#667085"} />
-            </View>
-          </View>
-        </View>
+    <GestureHandlerRootView style={styles.container}>
+      {/*Map */}
+      <MapComp />
 
-        <ScrollView horizontal contentContainerStyle={{ gap: 10 }}>
-          <TouchableOpacity
-            style={{
-              height: 40,
-              backgroundColor: "#f7f7f7",
-              borderRadius: 100,
-              flexDirection: "row",
-              paddingHorizontal: 17,
-              paddingVertical: 10,
-              gap: 8,
-            }}
-          >
-            <Ionicons name={"home"} size={20} color={"black"} />
-            <Text style={{ color: "black", fontSize: 16 }}>Home</Text>
-          </TouchableOpacity>
+      {/*Bottom View */}
+      <LocationSheet />
 
-          <TouchableOpacity
-            style={{
-              height: 40,
-              backgroundColor: "#f7f7f7",
-              borderRadius: 100,
-              flexDirection: "row",
-              paddingHorizontal: 17,
-              paddingVertical: 10,
-              gap: 8,
-            }}
-          >
-            <Ionicons name={"briefcase"} size={20} color={"black"} />
-            <Text style={{ color: "black", fontSize: 16 }}>Office</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              height: 40,
-              backgroundColor: "#f7f7f7",
-              borderRadius: 100,
-              flexDirection: "row",
-              paddingHorizontal: 17,
-              paddingVertical: 10,
-              gap: 8,
-            }}
-          >
-            <Ionicons name={"location"} size={20} color={"black"} />
-            <Text style={{ color: "black", fontSize: 16 }}>
-              Main road street
-            </Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-      {/*upper tab */}
-      <View style={{ marginTop: 40 }}>
-        <Text style={{ color: "black", fontSize: 16 }}>Map will show here</Text>
-      </View>
-    </View>
+      {/* <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={["40%"]}
+        backgroundStyle={{
+          borderRadius: 50,
+          backgroundColor: "#17191B",
+        }}
+      ></BottomSheet>
+      <CommentModal
+        isOpen={isTermsModalOpen}
+        onClose={handleCloseTermsModal}
+        bottomSheetModalRef={bottomSheetModalRef}
+      /> */}
+    </GestureHandlerRootView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  textInput2: {
-    paddingHorizontal: 20,
-    fontSize: 14,
-    borderRadius: 69,
-    height: 58,
+  container: {
     flex: 1,
-    color: "#101828",
   },
-  iconView: {
-    height: 58,
-    width: 60,
-    alignItems: "center",
-    justifyContent: "center",
+  map: {
+    flex: 1,
+  },
+  contentContainer: {
+    flex: 1,
   },
 });
+
+export default home;

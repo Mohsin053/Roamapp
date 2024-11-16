@@ -6,9 +6,7 @@ import {
   TouchableOpacity,
   Switch,
 } from "react-native";
-import { AntDesign, Ionicons, Feather } from "@expo/vector-icons";
-import AvatarImg from "../assets/images/img1.png";
-import { Avatar } from "@rneui/themed";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 

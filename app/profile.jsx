@@ -192,6 +192,7 @@ export default function profile() {
             alignItems: "center",
             flexDirection: "row",
           }}
+          onPress={() => router.navigate("linkedaccounts")}
         >
           <Ionicons
             name={"git-network-outline"}
