@@ -127,3 +127,50 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+
+
+
+import { StyleSheet, View, Text } from "react-native";
+import React, { useCallback, useRef, useMemo } from "react";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import MapComp from "../components/MapComp";
+import LocationSheet from "../components/LocationSheet";
+
+const home = () => {
+  const bottomSheetRef = useRef();
+  const snapPoints = useMemo(() => ["25%", "50%", "90%"], []);
+  return (
+    <>
+      {/*Map */}
+      <MapComp />
+
+      {/*Bottom View */}
+      <LocationSheet />
+      {/* 
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={["50%"]}
+        enableDynamicSizing={false}
+        backgroundStyle={{
+          borderRadius: 50,
+          backgroundColor: "#17191B",
+        }}
+      >
+        <BottomSheetView style={styles.contentContainer}>
+          <Text>Awesome 🔥</Text>
+        </BottomSheetView>
+      </BottomSheet> */}
+
+      {/* <CommentModal
+        isOpen={isTermsModalOpen}
+        onClose={handleCloseTermsModal}
+        bottomSheetModalRef={bottomSheetModalRef}
+      /> */}
+    </>
+  );
+};
+
+const styles = StyleSheet.create({});
+
+export default home;

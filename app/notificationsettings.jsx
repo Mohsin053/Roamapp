@@ -1,169 +1,99 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Switch,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import React, { useState } from "react";
+import { StyleSheet, Text, View, ScrollView, Switch } from "react-native";
+import { useRouter } from "expo-router";
+import { Header } from "../components/Header";
 
-export default function notificationsettings() {
+// Reusable Component for Notification Setting Item
+const NotificationSettingItem = ({ title, value, onToggle }) => (
+  <View style={styles.settingItem}>
+    <Text style={styles.settingText}>{title}</Text>
+    <Switch
+      trackColor={{ false: "#767577", true: "#5EF188" }}
+      thumbColor={value ? "white" : "#f4f4f4"}
+      onValueChange={onToggle}
+      value={value}
+    />
+  </View>
+);
+
+export default function NotificationSettings() {
   const router = useRouter();
+
+  // State for switches
   const [isEnabled, setIsEnabled] = useState(false);
   const [isEnabled1, setIsEnabled1] = useState(false);
   const [isEnabled2, setIsEnabled2] = useState(false);
   const [isEnabled3, setIsEnabled3] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
-  const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
-  const toggleSwitch2 = () => setIsEnabled2((previousState) => !previousState);
-  const toggleSwitch3 = () => setIsEnabled3((previousState) => !previousState);
+
   return (
     <ScrollView
-      style={{
-        flex: 1,
-        backgroundColor: "#f7f7f7",
-        padding: 20,
-      }}
-      contentContainerStyle={{
-        rowGap: 30,
-      }}
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
     >
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name={"chevron-back"} color={"black"} size={24} />
-        </TouchableOpacity>
-        <Text
-          style={{
-            color: "black",
-            fontWeight: "light",
-            fontSize: 18,
-          }}
-        >
-          Notifications Settings
-        </Text>
-        <Ionicons name={"chevron-back"} color={"transparent"} size={24} />
-      </View>
-      <View style={{ gap: 16 }}>
-        <View
-          style={{
-            height: 58,
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexDirection: "row",
-            borderRadius: 16,
-            backgroundColor: "white",
-            paddingHorizontal: 20,
-          }}
-        >
-          <Text
-            style={{
-              color: "black",
-              fontWeight: "light",
-              fontSize: 16,
-            }}
-          >
-            Enable
-          </Text>
-          <Switch
-            trackColor={{ false: "#767577", true: "#5EF188" }}
-            thumbColor={isEnabled ? "white" : "#f4f4f4"}
-            onValueChange={toggleSwitch}
-            value={isEnabled}
-          />
-        </View>
-        <View
-          style={{
-            height: 58,
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexDirection: "row",
-            borderRadius: 16,
-            backgroundColor: "white",
-            paddingHorizontal: 20,
-          }}
-        >
-          <Text
-            style={{
-              color: "black",
-              fontWeight: "light",
-              fontSize: 16,
-            }}
-          >
-            Ride Availability
-          </Text>
-          <Switch
-            trackColor={{ false: "#767577", true: "#5EF188" }}
-            thumbColor={isEnabled1 ? "white" : "#f4f4f4"}
-            onValueChange={toggleSwitch1}
-            value={isEnabled1}
-          />
-        </View>
-        <View
-          style={{
-            height: 58,
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexDirection: "row",
-            borderRadius: 16,
-            backgroundColor: "white",
-            paddingHorizontal: 20,
-          }}
-        >
-          <Text
-            style={{
-              color: "black",
-              fontWeight: "light",
-              fontSize: 16,
-            }}
-          >
-            Service disruption
-          </Text>
-          <Switch
-            trackColor={{ false: "#767577", true: "#5EF188" }}
-            thumbColor={isEnabled2 ? "white" : "#f4f4f4"}
-            onValueChange={toggleSwitch2}
-            value={isEnabled2}
-          />
-        </View>
-        <View
-          style={{
-            height: 58,
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexDirection: "row",
-            borderRadius: 16,
-            backgroundColor: "white",
-            paddingHorizontal: 20,
-          }}
-        >
-          <Text
-            style={{
-              color: "black",
-              fontWeight: "light",
-              fontSize: 16,
-            }}
-          >
-            Leave Alert
-          </Text>
-          <Switch
-            trackColor={{ false: "#767577", true: "#5EF188" }}
-            thumbColor={isEnabled3 ? "white" : "#f4f4f4"}
-            onValueChange={toggleSwitch3}
-            value={isEnabled3}
-          />
-        </View>
+      {/* Header */}
+      <Header title={"Notifications Settings"} />
+
+      {/* Notification Settings */}
+      <View style={styles.settingsContainer}>
+        <NotificationSettingItem
+          title="Enable"
+          value={isEnabled}
+          onToggle={() => setIsEnabled((prev) => !prev)}
+        />
+        <NotificationSettingItem
+          title="Ride Availability"
+          value={isEnabled1}
+          onToggle={() => setIsEnabled1((prev) => !prev)}
+        />
+        <NotificationSettingItem
+          title="Service Disruption"
+          value={isEnabled2}
+          onToggle={() => setIsEnabled2((prev) => !prev)}
+        />
+        <NotificationSettingItem
+          title="Leave Alert"
+          value={isEnabled3}
+          onToggle={() => setIsEnabled3((prev) => !prev)}
+        />
       </View>
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f7f7f7",
+    padding: 20,
+  },
+  contentContainer: {
+    rowGap: 30,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  headerTitle: {
+    color: "black",
+    fontWeight: "300",
+    fontSize: 18,
+  },
+  settingsContainer: {
+    gap: 16,
+  },
+  settingItem: {
+    height: 58,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderRadius: 16,
+    backgroundColor: "white",
+    paddingHorizontal: 20,
+  },
+  settingText: {
+    color: "black",
+    fontWeight: "300",
+    fontSize: 16,
+  },
+});

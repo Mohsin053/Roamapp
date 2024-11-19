@@ -1,35 +1,13 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { useDispatch } from "react-redux";
 import { setDestination, setOrigin } from "../utils/navSlice";
 const GOOGLE_MAPS_APIKEY = "AIzaSyDEBlZDXMpfgJKt8cUjz2JVTEjYqapwaK0";
-
-const data = [
-  {
-    id: "1",
-  },
-  {
-    id: "2",
-  },
-  {
-    id: "3",
-  },
-  {
-    id: "4",
-  },
-  {
-    id: "5",
-  },
-];
+import { Header } from "../components/Header";
+import { RoundedButton } from "../components/RoundedButton";
+import { RecentSearchItem } from "../components/RecentSearchItem";
+import { GoogleSearchInput } from "../components/GoogleSearchInput";
 
 export default function setLocation() {
   const { Location } = useLocalSearchParams();
@@ -52,190 +30,49 @@ export default function setLocation() {
   }, [originPlace]);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#f7f7f7",
-        padding: 20,
-      }}
-    >
-      {/*upper tab */}
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name={"chevron-back"} color={"black"} size={24} />
-        </TouchableOpacity>
-        <Text
-          style={{
-            color: "black",
-            fontWeight: "light",
-            fontSize: 18,
-          }}
-        >
-          {Location === "1" ? "Pick up Location" : "Dropoff Location"}
-        </Text>
-        <Ionicons name={"chevron-back"} color={"transparent"} size={24} />
-      </View>
+    <View style={styles.parentView}>
+      {/*Header */}
+      <Header
+        title={Location === "1" ? "Pick up Location" : "Dropoff Location"}
+      />
+
+      {/*input google tab */}
       <View style={{ gap: 12, marginTop: 20 }}>
-        <GooglePlacesAutocomplete
+        <GoogleSearchInput
           placeholder={Location === "1" ? "Pick Up" : "Destination"}
-          onPress={(data, details = null) => {
+          onPlaceSelected={(data, details) =>
             setOriginPlace({
               name: details.formatted_address,
               location: details.geometry.location,
               description: data.description,
-            });
-          }}
-          fetchDetails={true}
-          returnKeyType={"Search"}
-          currentLocationLabel="Current location"
-          // currentLocation={Location === "1" ? true : false}
-          styles={{
-            container: {
-              flex: 0,
-            },
-            textInput: {
-              paddingHorizontal: 20,
-              fontSize: 14,
-              borderRadius: 69,
-              height: 58,
-              flex: 1,
-              color: "#101828",
-            },
-            row: {
-              backgroundColor: "#FFFFFF",
-              height: 45,
-            },
-          }}
-          textInputProps={{
-            placeholderTextColor: "#101828",
-            returnKeyType: "search",
-          }}
-          debounce={400}
-          minLength={4}
-          enablePoweredByContainer={false}
-          nearbyPlacesAPI="GooglePlacesSearch"
-          query={{
-            key: GOOGLE_MAPS_APIKEY,
-            language: "en",
-          }}
+            })
+          }
+          APIKey={GOOGLE_MAPS_APIKEY}
         />
 
         <ScrollView horizontal contentContainerStyle={{ gap: 10 }}>
-          <TouchableOpacity
-            style={{
-              height: 40,
-              backgroundColor: "white",
-              borderRadius: 100,
-              flexDirection: "row",
-              paddingHorizontal: 17,
-              paddingVertical: 10,
-              gap: 8,
-            }}
-          >
-            <Ionicons name={"home"} size={20} color={"black"} />
-            <Text style={{ color: "black", fontSize: 16 }}>Home</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              height: 40,
-              backgroundColor: "white",
-              borderRadius: 100,
-              flexDirection: "row",
-              paddingHorizontal: 17,
-              paddingVertical: 10,
-              gap: 8,
-            }}
-          >
-            <Ionicons name={"briefcase"} size={20} color={"black"} />
-            <Text style={{ color: "black", fontSize: 16 }}>Office</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              height: 40,
-              backgroundColor: "white",
-              borderRadius: 100,
-              flexDirection: "row",
-              paddingHorizontal: 17,
-              paddingVertical: 10,
-              gap: 8,
-            }}
-          >
-            <Ionicons name={"location"} size={20} color={"black"} />
-            <Text style={{ color: "black", fontSize: 16 }}>
-              Main road street
-            </Text>
-          </TouchableOpacity>
+          <RoundedButton icon="home" label="Home" onPress={() => {}} />
+          <RoundedButton icon="briefcase" label="Office" onPress={() => {}} />
+          <RoundedButton
+            icon="location"
+            label="Main road street"
+            onPress={() => {}}
+          />
         </ScrollView>
       </View>
+      {/*input google tab */}
+
       {/*upper tab */}
-      <View
-        style={{
-          marginTop: 24,
-          backgroundColor: "white",
-          borderRadius: 24,
-          padding: 20,
-          gap: 24,
-        }}
-      >
-        <Text style={{ color: "black", fontSize: 20 }}>Recent Searches</Text>
+      <View style={styles.recentSearchContainer}>
+        <Text style={styles.recentSearchTitle}>Recent Searches</Text>
         <View style={{ gap: 24 }}>
-          {data.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              style={{
-                height: 40,
-                alignItems: "center",
-                flexDirection: "row",
-              }}
-            >
-              <View
-                style={{
-                  backgroundColor: "#F4F4F4",
-                  height: 40,
-                  width: 40,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderRadius: 20,
-                }}
-              >
-                <Ionicons name={"location"} color={"black"} size={24} />
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text
-                  style={{
-                    color: "black",
-                    fontWeight: "light",
-                    fontSize: 16,
-                    marginLeft: 15,
-                  }}
-                >
-                  Bobst Libraray
-                </Text>
-                <Text
-                  style={{
-                    color: "black",
-                    opacity: 0.6,
-                    fontWeight: "light",
-                    fontSize: 14,
-                    marginLeft: 15,
-                  }}
-                >
-                  Newyork - Main road street 2, near...
-                </Text>
-              </View>
-            </TouchableOpacity>
+          {["Bobst Library", "Main Street"].map((title, index) => (
+            <RecentSearchItem
+              key={index}
+              title={title}
+              subtitle="Newyork - Main road street 2, near..."
+              onPress={() => {}}
+            />
           ))}
         </View>
       </View>
@@ -244,18 +81,20 @@ export default function setLocation() {
 }
 
 const styles = StyleSheet.create({
-  textInput2: {
-    paddingHorizontal: 20,
-    fontSize: 14,
-    borderRadius: 69,
-    height: 58,
+  parentView: {
     flex: 1,
-    color: "#101828",
+    backgroundColor: "#f7f7f7",
+    padding: 20,
   },
-  iconView: {
-    height: 58,
-    width: 60,
-    alignItems: "center",
-    justifyContent: "center",
+  recentSearchContainer: {
+    marginTop: 24,
+    backgroundColor: "white",
+    borderRadius: 24,
+    padding: 20,
+    gap: 24,
+  },
+  recentSearchTitle: {
+    color: "black",
+    fontSize: 20,
   },
 });

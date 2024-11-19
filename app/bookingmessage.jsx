@@ -1,73 +1,34 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { Header } from "../components/Header";
 
-export default function bookingmessage() {
+export default function BookingMessage() {
   const router = useRouter();
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "white",
-        padding: 20,
-      }}
-    >
-      {/*upper tab */}
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name={"chevron-back"} color={"black"} size={24} />
-        </TouchableOpacity>
-        <Text
-          style={{
-            color: "black",
-            fontWeight: "light",
-            fontSize: 18,
-          }}
-        >
-          Payment method
-        </Text>
-        <Ionicons name={"chevron-back"} color={"transparent"} size={24} />
-      </View>
+    <View style={styles.container}>
+      {/* Header */}
+      <Header title={"Payment method"} />
 
-      {/*upper tab */}
-      <View
-        style={{
-          marginTop: 24,
-          gap: 24,
-        }}
-      >
-        <View
-          style={{
-            height: 90,
-            width: 90,
-            backgroundColor: "#3FE0D0",
-            borderRadius: 100,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+      {/* Main Content */}
+      <View style={styles.content}>
+        <View style={styles.iconWrapper}>
           <Ionicons name={"checkmark"} color={"black"} size={35} />
         </View>
-        <Text style={{ color: "black", fontSize: 32 }}>
-          Booking Confirmed Successfully!
-        </Text>
+        <Text style={styles.successText}>Booking Confirmed Successfully!</Text>
       </View>
-      <View style={{ gap: 16, marginTop: "auto", marginBottom: 50 }}>
+
+      {/* Buttons */}
+      <View style={styles.buttonsWrapper}>
         <TouchableOpacity
-          style={styles.button1}
+          style={[styles.button, styles.primaryButton]}
           onPress={() => router.navigate()}
         >
           <Text style={styles.buttonText}>See trip</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={[styles.button, styles.secondaryButton]}
           onPress={() => router.navigate("home")}
         >
           <Text style={styles.buttonText}>Go to home</Text>
@@ -78,36 +39,44 @@ export default function bookingmessage() {
 }
 
 const styles = StyleSheet.create({
-  textInput2: {
-    paddingHorizontal: 20,
-    fontSize: 14,
-    borderRadius: 69,
-    height: 58,
+  container: {
     flex: 1,
-    color: "#101828",
+    backgroundColor: "white",
+    padding: 20,
   },
-  iconView: {
-    height: 58,
-    width: 60,
+  content: {
+    marginTop: 40,
+    gap: 24,
+    padding: 20,
+  },
+  iconWrapper: {
+    height: 90,
+    width: 90,
+    backgroundColor: "#3FE0D0",
+    borderRadius: 45, // Half the height/width for a perfect circle
     alignItems: "center",
     justifyContent: "center",
   },
-  checkbox: {
-    borderRadius: 10,
+  successText: {
+    color: "black",
+    fontSize: 32,
+  },
+  buttonsWrapper: {
+    gap: 16,
+    marginTop: "auto",
+    marginBottom: 50,
   },
   button: {
     height: 58,
     borderRadius: 800,
-    backgroundColor: "#F4F4F4",
     alignItems: "center",
     justifyContent: "center",
   },
-  button1: {
-    height: 58,
-    borderRadius: 800,
-    backgroundColor: "#3fe0d0",
-    alignItems: "center",
-    justifyContent: "center",
+  primaryButton: {
+    backgroundColor: "#3FE0D0",
+  },
+  secondaryButton: {
+    backgroundColor: "#F4F4F4",
   },
   buttonText: {
     color: "black",
