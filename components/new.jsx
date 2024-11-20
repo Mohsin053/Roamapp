@@ -129,6 +129,48 @@ const styles = StyleSheet.create({
 });
 
 
+useEffect(() => {
+  if (!origin && !destination) return; // Exit if both are null
+
+  const timeout = setTimeout(() => {
+    if (origin && destination) {
+      // Fit to both origin and destination
+      mapRef?.current?.fitToSuppliedMarkers(["origin", "destination"], {
+        edgePadding: {
+          top: 100,
+          right: 100,
+          left: 100,
+          bottom: 100,
+        },
+        animated: true, // Fix typo here
+      });
+    } else if (origin) {
+      // Zoom to origin only
+      mapRef?.current?.animateToRegion(
+        {
+          latitude: origin.location.lat,
+          longitude: origin.location.lng,
+          latitudeDelta: 0.05, // Adjust zoom level
+          longitudeDelta: 0.05,
+        },
+        1000 // Duration for smooth animation
+      );
+    } else if (destination) {
+      // Zoom to destination only
+      mapRef?.current?.animateToRegion(
+        {
+          latitude: destination.location.lat,
+          longitude: destination.location.lng,
+          latitudeDelta: 0.05, // Adjust zoom level
+          longitudeDelta: 0.05,
+        },
+        1000
+      );
+    }
+  }, 500); // Adjust delay as needed
+
+  return () => clearTimeout(timeout); // Cleanup timeout
+}, [origin, destination]);
 
 
 import { StyleSheet, View, Text } from "react-native";

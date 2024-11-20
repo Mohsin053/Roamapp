@@ -1,29 +1,17 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import BottomSheet, {
-  BottomSheetScrollView,
-  BottomSheetView,
-} from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { BlurView } from "expo-blur";
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import car from "../assets/images/car.png";
 import AvatarImg from "../assets/images/img1.png";
 import { Avatar } from "@rneui/themed";
 import { useRouter } from "expo-router";
-import { Header } from "../components/Header";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useSelector } from "react-redux";
 import { selectOrigin, selectDestination } from "../utils/navSlice";
 const GOOGLE_MAPS_APIKEY = "AIzaSyDEBlZDXMpfgJKt8cUjz2JVTEjYqapwaK0";
-import * as Location from "expo-location";
 
 // Reusable RideDetails Component
 const RideDetails = ({ carName, carModel, image }) => (
@@ -77,11 +65,11 @@ const CostSummary = ({ label, amount }) => (
 
 export default function RideDetailsScreen() {
   const router = useRouter();
-  const [userLocation, setUserLocation] = useState(null);
   const origin = useSelector(selectOrigin);
   const destination = useSelector(selectDestination);
-  const mapRef = useRef(null);
   const bottomSheetRef = useRef();
+  console.log(origin);
+  console.log(origin.location.lat);
 
   return (
     <View style={styles.container}>
@@ -105,55 +93,50 @@ export default function RideDetailsScreen() {
             flex: 1,
           }}
           showsCompass={false}
-          maxZoomLevel={1000}
-          ref={mapRef}
-          region={{
-            latitude: userLocation?.latitude || 28.456312,
-            longitude: userLocation?.longitude || -16.252929,
+          maxZoomLevel={10}
+          initialRegion={{
+            latitude: origin.location.lat,
+            longitude: origin.location.lng,
             latitudeDelta: 0.001,
             longitudeDelta: 0.01,
           }}
         >
-          {origin && destination && (
-            <>
-              <Marker
-                coordinate={{
-                  latitude: origin.location.lat,
-                  longitude: origin.location.lng,
-                }}
-                description={destination.description}
-                identifier="origin"
-              />
-              <MapViewDirections
-                origin={{
-                  latitude: origin.location.lat,
-                  longitude: origin.location.lng,
-                }}
-                destination={{
-                  latitude: destination.location.lat,
-                  longitude: destination.location.lng,
-                }}
-                apikey={GOOGLE_MAPS_APIKEY}
-                strokeWidth={5}
-                strokeColor="blue"
-              />
-              <Marker
-                coordinate={{
-                  latitude: destination.location.lat,
-                  longitude: destination.location.lng,
-                }}
-                description={destination.description}
-                identifier="destination"
-              />
-            </>
-          )}
+          <Marker
+            coordinate={{
+              latitude: origin.location.lat,
+              longitude: origin.location.lng,
+            }}
+            description={destination.description}
+            identifier="origin"
+          />
+          <MapViewDirections
+            origin={{
+              latitude: origin.location.lat,
+              longitude: origin.location.lng,
+            }}
+            destination={{
+              latitude: destination.location.lat,
+              longitude: destination.location.lng,
+            }}
+            apikey={GOOGLE_MAPS_APIKEY}
+            strokeWidth={3}
+            strokeColor="black"
+          />
+          <Marker
+            coordinate={{
+              latitude: destination.location.lat,
+              longitude: destination.location.lng,
+            }}
+            description={destination.description}
+            identifier="destination"
+          />
         </MapView>
       </View>
       {/* Car Details */}
 
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={["80%"]}
+        snapPoints={["75%"]}
         enableDynamicSizing={false}
         backgroundStyle={{
           borderRadius: 50,

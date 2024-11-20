@@ -11,21 +11,6 @@ import { Avatar } from "@rneui/themed";
 export default function MapComp({ userLocation, mapRef, origin, destination }) {
   const router = useRouter();
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      mapRef?.current?.fitToSuppliedMarkers(["origin", "destination"], {
-        edgePadding: {
-          top: 100,
-          right: 100,
-          left: 100,
-          bottom: 100,
-        },
-      });
-    }, 500); // Adjust delay as needed
-
-    return () => clearTimeout(timeout); // Cleanup timeout
-  }, [origin, destination]);
-
   return (
     <View
       style={{
