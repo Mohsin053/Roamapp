@@ -7,10 +7,11 @@ import {
   ScrollView,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
 import Checkbox from "expo-checkbox";
 import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
+import ConnectedServicesLoginModal from "../components/ConnectedServicesLoginModal";
 
 // Reusable Button Component
 const CustomButton = ({ title, onPress, style, textStyle }) => (
@@ -63,8 +64,13 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setChecked] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
+  const [isEnabled, setIsEnabled] = useState(false);
+  const bottomSheetRef = useRef(null);
+
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetRef.current?.handlePresentModalPress();
+  }, []);
 
   const handleLogin = () => {
     if (name.trim() === "" || password.trim() === "") {
@@ -73,71 +79,80 @@ export default function Login() {
         text1: "Please fill all fields",
       });
     } else {
-      router.navigate("home");
+      handlePresentModalPress();
     }
   };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <TouchableOpacity
-        style={styles.forgotButton}
-        onPress={() => router.navigate("login")}
+      <View
+        style={{
+          padding: 20,
+          gap: 16,
+          flex: 1,
+        }}
       >
-        <Text>Forgot?</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.title}>Sign In</Text>
-      <Text style={styles.subtitle}>
-        Welcome Back to Roam! Please enter the details to continue
-      </Text>
-
-      <CustomTextInput
-        placeholder="Email"
-        value={name}
-        onChangeText={setName}
-      />
-      <CustomTextInput
-        placeholder="Password"
-        secureTextEntry={!showPassword}
-        value={password}
-        onChangeText={setPassword}
-        showPasswordToggle
-        onTogglePassword={() => setShowPassword(!showPassword)}
-      />
-
-      <View style={styles.checkboxWrapper}>
-        <Checkbox
-          style={styles.checkbox}
-          value={isChecked}
-          onValueChange={setChecked}
-          color={isChecked ? "#3fe0d0" : undefined}
-        />
-        <Text>Remember me</Text>
-      </View>
-
-      <CustomButton title="Sign In" onPress={handleLogin} />
-      <Text style={styles.orText}>OR</Text>
-
-      <View style={styles.socialButtonsWrapper}>
-        <SocialButton
-          icon="logo-google"
-          title="Google"
-          iconColor="#3fe0d0"
-          onPress={() => {}}
-        />
-        <SocialButton
-          icon="logo-apple"
-          title="Apple"
-          iconColor="#12131A"
-          onPress={() => {}}
-        />
-      </View>
-
-      <View style={styles.newAction}>
-        <Text style={styles.newActionText1}>Don’t have an account?</Text>
-        <TouchableOpacity onPress={() => router.navigate("signup")}>
-          <Text style={styles.newActionText2}>Sign Up</Text>
+        <TouchableOpacity
+          style={styles.forgotButton}
+          onPress={() => router.navigate("login")}
+        >
+          <Text>Forgot?</Text>
         </TouchableOpacity>
+
+        <Text style={styles.title}>Sign In</Text>
+        <Text style={styles.subtitle}>
+          Welcome Back to Roam! Please enter the details to continue
+        </Text>
+
+        <CustomTextInput
+          placeholder="Email"
+          value={name}
+          onChangeText={setName}
+        />
+        <CustomTextInput
+          placeholder="Password"
+          secureTextEntry={!showPassword}
+          value={password}
+          onChangeText={setPassword}
+          showPasswordToggle
+          onTogglePassword={() => setShowPassword(!showPassword)}
+        />
+
+        <View style={styles.checkboxWrapper}>
+          <Checkbox
+            style={styles.checkbox}
+            value={isChecked}
+            onValueChange={setChecked}
+            color={isChecked ? "#3fe0d0" : undefined}
+          />
+          <Text>Remember me</Text>
+        </View>
+
+        <CustomButton title="Sign In" onPress={handleLogin} />
+        <Text style={styles.orText}>OR</Text>
+
+        <View style={styles.socialButtonsWrapper}>
+          <SocialButton
+            icon="logo-google"
+            title="Google"
+            iconColor="#3fe0d0"
+            onPress={() => {}}
+          />
+          <SocialButton
+            icon="logo-apple"
+            title="Apple"
+            iconColor="#12131A"
+            onPress={() => {}}
+          />
+        </View>
+
+        <View style={styles.newAction}>
+          <Text style={styles.newActionText1}>Don’t have an account?</Text>
+          <TouchableOpacity onPress={() => router.navigate("signup")}>
+            <Text style={styles.newActionText2}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+        <ConnectedServicesLoginModal ref={bottomSheetRef} />
       </View>
     </ScrollView>
   );
@@ -147,7 +162,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    padding: 20,
   },
   content: {
     rowGap: 16,

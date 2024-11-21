@@ -23,6 +23,7 @@ export default function LocationSheet() {
     {
       id: "1",
       name: "Uber X",
+      namepic: require("../assets/images/uberxtext.png"),
       type: "Luxury",
       time: "1:10 pm",
       price: "$98.65",
@@ -32,6 +33,7 @@ export default function LocationSheet() {
     {
       id: "2",
       name: "BLACKLANE",
+      namepic: require("../assets/images/blacklanetext.png"),
       type: "Luxury",
       time: "1:10 pm",
       price: "$98.65",
@@ -41,6 +43,7 @@ export default function LocationSheet() {
     {
       id: "3",
       name: "Lyft",
+      namepic: require("../assets/images/lyfttext.png"),
       type: "Luxury",
       time: "1:10 pm",
       price: "$98.65",

@@ -30,7 +30,11 @@ export const RidesList = ({
       <Image source={item.image} resizeMode="contain" />
       <View style={styles.carDetails}>
         <View style={styles.carTitleRow}>
-          <Text style={styles.carName}>{item.name}</Text>
+          <Image
+            source={item.namepic}
+            style={{ marginRight: 10 }}
+            resizeMode="contain"
+          />
           <Ionicons name={"person"} color={"black"} size={14} />
           <Text style={styles.carPeople}>{item.people}</Text>
         </View>
