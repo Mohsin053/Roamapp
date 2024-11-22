@@ -42,75 +42,87 @@ const home = () => {
     getLocation();
   }, []);
 
-  // useEffect(() => {
-  //   if (!origin?.location || !destination?.location) return;
-
-  //   mapRef?.current?.fitToSuppliedMarkers(["origin", "destination"], {
-  //     edgePadding: {
-  //       top: 100,
-  //       right: 100,
-  //       bottom: 100,
-  //       left: 100,
-  //     },
-  //     animated: true,
-  //   });
-  // }, [origin, destination]);
-
-  // console.log("origin = ", origin);
-
   useEffect(() => {
-    // console.log("Origin:", origin);
-    // console.log("Destination:", destination);
-
     // Check if both origin and destination exist
     if (origin && destination) {
-      mapRef?.current?.fitToSuppliedMarkers(["origin", "destination"], {
-        edgePadding: {
-          top: 100,
-          right: 100,
-          left: 100,
-          bottom: 100,
-        },
-      });
+      const timeout = setTimeout(() => {
+        mapRef?.current?.fitToSuppliedMarkers(["origin", "destination"], {
+          edgePadding: {
+            top: 50,
+            right: 50,
+            left: 50,
+            bottom: 50,
+          },
+          animated: true,
+        });
+      }, 500); // Adjust delay as needed
+
+      return () => clearTimeout(timeout); // Cleanup timeout
     } else if (origin) {
       // If only origin is available
-      mapRef?.current?.fitToCoordinates(
-        [
+      const timeout = setTimeout(() => {
+        mapRef?.current?.fitToCoordinates(
+          [
+            {
+              latitude: origin.location.lat,
+              longitude: origin.location.lng,
+            },
+          ],
           {
-            latitude: origin.location.lat,
-            longitude: origin.location.lng,
-          },
-        ],
-        {
-          edgePadding: {
-            top: 100,
-            right: 100,
-            left: 100,
-            bottom: 100,
-          },
-          animated: true,
-        }
-      );
+            edgePadding: {
+              top: 50,
+              right: 50,
+              left: 50,
+              bottom: 50,
+            },
+            animated: true,
+          }
+        );
+      }, 500); // Adjust delay as needed
+
+      return () => clearTimeout(timeout); // Cleanup timeout
     } else if (destination) {
       // If only destination is available
-      mapRef?.current?.fitToCoordinates(
-        [
+
+      const timeout = setTimeout(() => {
+        mapRef?.current?.fitToCoordinates(
+          [
+            {
+              latitude: destination.location.lat,
+              longitude: destination.location.lng,
+            },
+          ],
           {
-            latitude: destination.location.lat,
-            longitude: destination.location.lng,
-          },
-        ],
-        {
-          edgePadding: {
-            top: 100,
-            right: 100,
-            left: 100,
-            bottom: 100,
-          },
-          animated: true,
-        }
-      );
+            edgePadding: {
+              top: 50,
+              right: 50,
+              left: 50,
+              bottom: 50,
+            },
+            animated: true,
+          }
+        );
+      }, 500); // Adjust delay as needed
+
+      return () => clearTimeout(timeout); // Cleanup timeout
     }
+  }, [origin, destination]);
+
+  useEffect(() => {
+    if (!origin && !destination) return;
+    const timeout = setTimeout(() => {
+      mapRef?.current?.fitToSuppliedMarkers(["origin", "destination"], {
+        edgePadding: {
+          top: 50,
+          right: 50,
+          left: 50,
+          bottom: 50,
+        },
+      });
+      console.log("hi ooooo");
+    }, 500); // Adjust delay as needed
+
+    return () => clearTimeout(timeout); // Cleanup timeout
   }, [origin, destination]);
 
   // if (!userLocation) {
