@@ -21,6 +21,7 @@ const home = () => {
   const destination = useSelector(selectDestination);
 
   useEffect(() => {
+    if (origin && destination) return;
     const getLocation = async () => {
       try {
         const { status } = await Location.requestForegroundPermissionsAsync();
@@ -58,7 +59,7 @@ const home = () => {
       }, 500); // Adjust delay as needed
 
       return () => clearTimeout(timeout); // Cleanup timeout
-    } else if (origin) {
+    } else if (origin && !destination) {
       // If only origin is available
       const timeout = setTimeout(() => {
         mapRef?.current?.fitToCoordinates(
@@ -81,7 +82,7 @@ const home = () => {
       }, 500); // Adjust delay as needed
 
       return () => clearTimeout(timeout); // Cleanup timeout
-    } else if (destination) {
+    } else if (!origin && destination) {
       // If only destination is available
 
       const timeout = setTimeout(() => {
@@ -118,8 +119,8 @@ const home = () => {
           left: 50,
           bottom: 50,
         },
+        animated: true,
       });
-      console.log("hi ooooo");
     }, 500); // Adjust delay as needed
 
     return () => clearTimeout(timeout); // Cleanup timeout

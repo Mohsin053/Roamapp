@@ -56,11 +56,13 @@ export default function LocationSheet() {
   const [selectedTab, setSelectedTab] = useState("Car");
 
   useEffect(() => {
-    if (!origin || !destination === null) return;
+    // Run only if origin and destination are both not null
+    if (!origin || !destination) return;
+
     const getTravelTime = async () => {
       try {
         const res = await fetch(
-          `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin.location.lat},${origin.location.lng}&destinations=${destination.location.lat},${origin.location.lng}&key=${GOOGLE_MAPS_APIKEY}`,
+          `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin.location.lat},${origin.location.lng}&destinations=${destination.location.lat},${destination.location.lng}&key=${GOOGLE_MAPS_APIKEY}`,
           {
             headers: {
               "content-type": "application/json",
@@ -73,11 +75,12 @@ export default function LocationSheet() {
         setTravelTime(response.rows[0].elements[0].duration.text);
         dispatch(setTravelTimeInformation(response.rows[0].elements[0]));
       } catch (err) {
-        console.log(err);
+        console.error("Error fetching travel time:", err);
       }
     };
+
     getTravelTime();
-  }, [origin, destination]);
+  }, [origin, destination, dispatch]); // Added dispatch to dependency array
 
   return (
     <View style={{ backgroundColor: "transparent" }}>

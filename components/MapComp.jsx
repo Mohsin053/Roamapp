@@ -1,9 +1,7 @@
-import { useRef, useState, useEffect } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 const GOOGLE_MAPS_APIKEY = "AIzaSyDEBlZDXMpfgJKt8cUjz2JVTEjYqapwaK0";
-
 import AvatarImg from "../assets/images/img1.png";
 import { useRouter } from "expo-router";
 import { Avatar } from "@rneui/themed";
@@ -24,31 +22,29 @@ export default function MapComp({ userLocation, mapRef, origin, destination }) {
       </View>
 
       <MapView
+        ref={mapRef}
         provider={PROVIDER_GOOGLE}
         style={{
           flex: 1,
         }}
         showsCompass={false}
-        maxZoomLevel={1000}
         showsUserLocation={origin && destination ? false : true}
+        maxZoomLevel={20}
         region={{
-          latitude: userLocation?.latitude || 28.456312,
-          longitude: userLocation?.longitude || -16.252929,
-          latitudeDelta: 0.001,
-          longitudeDelta: 0.01,
+          latitude:
+            origin?.location?.lat ||
+            destination?.location?.lat ||
+            userLocation?.latitude ||
+            28.456312,
+          longitude:
+            origin?.location?.lng ||
+            destination?.location?.lat ||
+            userLocation?.longitude ||
+            -16.252929,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
         }}
-        ref={mapRef}
       >
-        {!origin && (
-          <Marker
-            coordinate={{
-              latitude: userLocation?.latitude || 28.456312,
-              longitude: userLocation?.longitude || -16.252929,
-              latitudeDelta: 0.0122,
-              longitudeDelta: 0.0421,
-            }}
-          />
-        )}
         {origin?.location && (
           <Marker
             coordinate={{
@@ -57,6 +53,7 @@ export default function MapComp({ userLocation, mapRef, origin, destination }) {
             }}
             description={origin.description}
             identifier="origin"
+            pinColor="#00A76F"
           />
         )}
         {destination?.location && (
@@ -67,6 +64,7 @@ export default function MapComp({ userLocation, mapRef, origin, destination }) {
             }}
             description={destination.description}
             identifier="destination"
+            pinColor="#FF4C4C"
           />
         )}
         {origin && destination && (
@@ -78,6 +76,7 @@ export default function MapComp({ userLocation, mapRef, origin, destination }) {
               }}
               description={destination.description}
               identifier="origin"
+              pinColor="#00A76F"
             />
             <MapViewDirections
               origin={{
@@ -99,6 +98,7 @@ export default function MapComp({ userLocation, mapRef, origin, destination }) {
               }}
               description={destination.description}
               identifier="destination"
+              pinColor="#FF4C4C"
             />
           </>
         )}
