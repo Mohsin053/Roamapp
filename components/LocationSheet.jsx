@@ -5,20 +5,25 @@ import {
   selectOrigin,
   selectDestination,
   setTravelTimeInformation,
+  setDestination,
+  setOrigin,
 } from "../utils/navSlice";
 import { RidesList } from "./RidesList"; // Import the RidesList Component
 import { LocationSelection } from "./LocationSelection"; // Import the LocationSelection Component
 
 const GOOGLE_MAPS_APIKEY = "AIzaSyDEBlZDXMpfgJKt8cUjz2JVTEjYqapwaK0";
 
-export default function LocationSheet() {
+export default function LocationSheet({
+  openModal,
+  openRideModal,
+  openLocationModal,
+}) {
   const origin = useSelector(selectOrigin);
   const destination = useSelector(selectDestination);
   const dispatch = useDispatch();
   const [distance, setDistance] = useState(null);
   const [travelTime, setTravelTime] = useState(null);
   const [showRides, setShowRides] = useState(false);
-
   const data = [
     {
       id: "1",
@@ -92,14 +97,19 @@ export default function LocationSheet() {
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}
           setShowRides={setShowRides}
+          openRideModal={openRideModal}
         />
       ) : (
         <LocationSelection
           origin={origin}
           destination={destination}
+          setDestination={setDestination}
+          setOrigin={setOrigin}
           distance={distance}
           travelTime={travelTime}
           setShowRides={setShowRides}
+          openModal={openModal}
+          openLocationModal={openLocationModal}
         />
       )}
     </View>

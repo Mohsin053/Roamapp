@@ -3,14 +3,13 @@ import { View, Text, StyleSheet } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons"; // Using Material Icons as an example
 
-export const GoogleSearchInput = ({
+export const GoogleSearchInputDestination = ({
   placeholder,
   onPlaceSelected,
   APIKey,
   active,
   onFocus,
   onBlur,
-  changeStyle,
 }) => {
   return (
     <GooglePlacesAutocomplete
@@ -30,11 +29,11 @@ export const GoogleSearchInput = ({
           color: "#101828",
           backgroundColor: "#FFFFFF",
           borderWidth: 2,
-          borderColor: active ? "#00A76F" : "#E5E5E5", // Change border color based on active state
+          borderColor: active ? "#FF4C4C" : "#E5E5E5", // Change border color based on active state
         },
         listView: {
           position: "absolute",
-          top: changeStyle ? 65 : 130,
+          top: 65,
           backgroundColor: "white",
           borderRadius: 8,
           elevation: 5,
@@ -76,6 +75,7 @@ export const GoogleSearchInput = ({
           </View>
         </View>
       )}
+      clear
     />
   );
 };

@@ -17,6 +17,7 @@ export const RidesList = ({
   selectedTab,
   setSelectedTab,
   setShowRides,
+  openRideModal,
 }) => {
   const router = useRouter();
   const renderItem = ({ item }) => (
@@ -83,10 +84,7 @@ export const RidesList = ({
           <Text style={styles.noOptionText}>No Bikes Available</Text>
         )}
       </View>
-      <TouchableOpacity
-        style={styles.chooseButton}
-        onPress={() => router.navigate("ridedetails")}
-      >
+      <TouchableOpacity style={styles.chooseButton} onPress={openRideModal}>
         <Text style={styles.chooseButtonText}>Choose {selectedCar?.name}</Text>
       </TouchableOpacity>
     </View>

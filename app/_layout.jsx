@@ -55,11 +55,8 @@ export default function RootLayout() {
                   <Stack.Screen name="profile" />
                   <Stack.Screen name="notifications" />
                   <Stack.Screen name="notificationsettings" />
-                  <Stack.Screen name="setLocation" />
                   <Stack.Screen name="paymentmethod" />
                   <Stack.Screen name="bookingmessage" />
-                  <Stack.Screen name="linkedaccounts" />
-                  <Stack.Screen name="ridedetails" />
                 </Stack>
               </KeyboardAvoidingView>
             </SafeAreaView>

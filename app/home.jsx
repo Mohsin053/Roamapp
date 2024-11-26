@@ -1,24 +1,44 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import * as Location from "expo-location";
 import MapComp from "../components/MapComp";
 import LocationSheet from "../components/LocationSheet";
 import { useSelector } from "react-redux";
 import { selectOrigin, selectDestination } from "../utils/navSlice";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
-import MapViewDirections from "react-native-maps-directions";
-const GOOGLE_MAPS_APIKEY = "AIzaSyDEBlZDXMpfgJKt8cUjz2JVTEjYqapwaK0";
-
-import AvatarImg from "../assets/images/img1.png";
-import { useRouter } from "expo-router";
-import { Avatar } from "@rneui/themed";
+import SetLocationModal from "../components/SetLocationModal";
+import RidedetailsModal from "../components/RidedetailsModal";
+import SetSingleLocationModal from "../components/SetSingleLocationModal";
 
 const home = () => {
-  const router = useRouter();
   const [userLocation, setUserLocation] = useState(null);
   const mapRef = useRef(null);
   const origin = useSelector(selectOrigin);
   const destination = useSelector(selectDestination);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isRideModalVisible, setIsRideModalVisible] = useState(false);
+  const [isLocationModalVisible, setIsLocationModalVisible] = useState(false);
+  const [activeInput, setActiveInput] = useState(null); // Add active input state
+  const bottomSheetRef = useRef(null);
+  const bottomSheetRef1 = useRef(null);
+  const bottomSheetRef2 = useRef(null);
+  console.log("origin = ", origin);
+  console.log("destination = ", destination);
+
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetRef.current?.handlePresentModalPress();
+  }, []);
+
+  const handlePresentModalPress1 = useCallback(() => {
+    bottomSheetRef1.current?.handlePresentModalPress1();
+  }, []);
+
+  const handlePresentModalPress2 = useCallback(() => {
+    bottomSheetRef2.current?.handlePresentModalPress2();
+  }, []);
+
+  const openLocationModal = (type) => {
+    setActiveInput(type); // Set the active input
+    handlePresentModalPress2(); // Open the modal
+  };
 
   useEffect(() => {
     if (origin && destination) return;
@@ -139,112 +159,41 @@ const home = () => {
   return (
     <>
       {/* Map */}
-      <View
-        style={{
-          flex: 1,
-        }}
-      >
-        <View style={styles.iconButton}>
-          <TouchableOpacity onPress={() => router.navigate("profile")}>
-            <Avatar rounded source={AvatarImg} size={58} />
-          </TouchableOpacity>
-        </View>
-
-        <MapView
-          ref={mapRef}
-          provider={PROVIDER_GOOGLE}
-          style={{
-            flex: 1,
-          }}
-          showsCompass={false}
-          showsUserLocation={origin && destination ? false : true}
-          maxZoomLevel={20}
-          region={{
-            latitude:
-              origin?.location?.lat ||
-              destination?.location?.lat ||
-              userLocation?.latitude ||
-              28.456312,
-            longitude:
-              origin?.location?.lng ||
-              destination?.location?.lat ||
-              userLocation?.longitude ||
-              -16.252929,
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
-          }}
-        >
-          {origin?.location && (
-            <Marker
-              coordinate={{
-                latitude: origin.location.lat,
-                longitude: origin.location.lng,
-              }}
-              description={origin.description}
-              identifier="origin"
-              pinColor="#00A76F"
-            />
-          )}
-          {destination?.location && (
-            <Marker
-              coordinate={{
-                latitude: destination.location.lat,
-                longitude: destination.location.lng,
-              }}
-              description={destination.description}
-              identifier="destination"
-              pinColor="#FF4C4C"
-            />
-          )}
-          {origin && destination && (
-            <>
-              <Marker
-                coordinate={{
-                  latitude: origin.location.lat,
-                  longitude: origin.location.lng,
-                }}
-                description={destination.description}
-                identifier="origin"
-                pinColor="#00A76F"
-              />
-              <MapViewDirections
-                origin={{
-                  latitude: origin.location.lat,
-                  longitude: origin.location.lng,
-                }}
-                destination={{
-                  latitude: destination.location.lat,
-                  longitude: destination.location.lng,
-                }}
-                apikey={GOOGLE_MAPS_APIKEY}
-                strokeWidth={4}
-                strokeColor="black"
-              />
-              <Marker
-                coordinate={{
-                  latitude: destination.location.lat,
-                  longitude: destination.location.lng,
-                }}
-                description={destination.description}
-                identifier="destination"
-                pinColor="#FF4C4C"
-              />
-            </>
-          )}
-        </MapView>
-      </View>
+      <MapComp
+        userLocation={userLocation}
+        mapRef={mapRef}
+        origin={origin}
+        destination={destination}
+        isModalVisible={isModalVisible}
+        openModal={handlePresentModalPress}
+      />
       {/* Bottom View */}
-      <LocationSheet />
+
+      {(origin || destination) && (
+        <LocationSheet
+          openModal={handlePresentModalPress}
+          openRideModal={handlePresentModalPress1}
+          openLocationModal={(type) => openLocationModal(type)}
+        />
+      )}
+      {/* openModal={handlePresentModalPress} */}
+      <SetLocationModal
+        ref={bottomSheetRef}
+        setIsModalVisible={setIsModalVisible} // Pass visibility handler
+      />
+
+      <RidedetailsModal
+        ref={bottomSheetRef1}
+        setIsRideModalVisible={setIsRideModalVisible} // Pass visibility handler
+      />
+
+      <SetSingleLocationModal
+        ref={bottomSheetRef2}
+        setIsLocationModalVisible={setIsLocationModalVisible} // Pass visibility handler
+        activeInput={activeInput} // Pass the active input type
+      />
     </>
   );
 };
-const styles = StyleSheet.create({
-  iconButton: {
-    zIndex: 10,
-    position: "absolute",
-    top: 20,
-    left: 20,
-  },
-});
 
 export default home;
