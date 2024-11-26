@@ -20,8 +20,6 @@ const home = () => {
   const bottomSheetRef = useRef(null);
   const bottomSheetRef1 = useRef(null);
   const bottomSheetRef2 = useRef(null);
-  console.log("origin = ", origin);
-  console.log("destination = ", destination);
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetRef.current?.handlePresentModalPress();
