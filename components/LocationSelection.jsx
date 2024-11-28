@@ -7,7 +7,6 @@ import {
   Alert,
 } from "react-native";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
 import { useDispatch } from "react-redux";
 
@@ -21,7 +20,6 @@ export const LocationSelection = ({
   setShowRides,
   openLocationModal,
 }) => {
-  const router = useRouter();
   const dispatch = useDispatch();
 
   // Validation Function
@@ -54,40 +52,72 @@ export const LocationSelection = ({
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         {/* Origin Input */}
-        <TouchableOpacity
-          style={styles.locationInputContainer}
-          onPress={() => openLocationModal("origin")}
-        >
-          <MaterialCommunityIcons
-            name={"record-circle"}
-            color={"#00A76F"}
-            size={24}
-          />
-          <View style={styles.locationInput}>
-            <Text style={styles.locationText}>
-              {origin ? origin.name.substring(0, 35) + "..." : "Pick Up"}
-            </Text>
-          </View>
-        </TouchableOpacity>
 
-        {/* Destination Input */}
-        <TouchableOpacity
-          style={styles.locationInputContainer}
-          onPress={() => openLocationModal("destination")}
+        <View
+          style={{
+            flexDirection: "row",
+          }}
         >
-          <MaterialCommunityIcons
-            name={"record-circle"}
-            color={"#FF4C4C"}
-            size={24}
-          />
-          <View style={styles.locationInput}>
-            <Text style={styles.locationText}>
-              {destination
-                ? destination.name.substring(0, 35) + "..."
-                : "Destination"}
-            </Text>
+          {/*first view */}
+          <View
+            style={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingVertical: 10,
+            }}
+          >
+            <MaterialCommunityIcons
+              name={"record-circle"}
+              color={"#00A76F"}
+              size={24}
+            />
+            <View
+              style={{
+                backgroundColor: "black",
+                opacity: 0.2,
+                width: 2,
+                flex: 1,
+              }}
+            />
+            <Ionicons name={"location"} color={"#FF4C4C"} size={24} />
           </View>
-        </TouchableOpacity>
+          {/*2nd view */}
+          <View
+            style={{
+              flex: 1,
+              paddingLeft: 10,
+            }}
+          >
+            <TouchableOpacity onPress={() => openLocationModal("origin")}>
+              <View style={styles.locationInput}>
+                <Text style={{ color: "black", opacity: 0.3, fontSize: 12 }}>
+                  Pick Up
+                </Text>
+                <Text style={styles.locationText}>
+                  {origin
+                    ? origin.name.substring(0, 30) + "..."
+                    : "Where From?"}
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <View
+              style={{ borderColor: "black", opacity: 0.2, borderWidth: 1 }}
+            />
+            {/* Destination Input */}
+            <TouchableOpacity onPress={() => openLocationModal("destination")}>
+              <View style={styles.locationInput}>
+                <Text style={{ color: "black", opacity: 0.3, fontSize: 12 }}>
+                  Drop Off
+                </Text>
+                <Text style={styles.locationText}>
+                  {destination
+                    ? destination.name.substring(0, 35) + "..."
+                    : "Where to?"}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
 
         {/* Distance and Travel Time */}
         {origin && destination && (
@@ -124,7 +154,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   scrollViewContent: {
-    padding: 20,
+    padding: 15,
     flexGrow: 1,
     gap: 10,
   },
@@ -132,6 +162,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
+    borderColor: "red",
+    borderWidth: 1,
   },
   title: {
     color: "black",
@@ -145,11 +177,8 @@ const styles = StyleSheet.create({
   },
   locationInput: {
     justifyContent: "center",
-    borderRadius: 69,
-    backgroundColor: "#f4f4f4",
-    paddingHorizontal: 20,
-    height: 50,
     flex: 1,
+    height: 50,
   },
   locationText: {
     color: "black",
@@ -170,7 +199,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   findRideButton: {
-    height: 58,
+    height: 50,
     borderRadius: 69,
     backgroundColor: "#3fe0d0",
     alignItems: "center",
@@ -178,7 +207,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   findRideButton2: {
-    height: 58,
+    height: 50,
     borderRadius: 69,
     backgroundColor: "#f4f4f4",
     alignItems: "center",

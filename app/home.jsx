@@ -17,6 +17,7 @@ const home = () => {
   const [isRideModalVisible, setIsRideModalVisible] = useState(false);
   const [isLocationModalVisible, setIsLocationModalVisible] = useState(false);
   const [activeInput, setActiveInput] = useState(null); // Add active input state
+  const [activeRide, setActiveRide] = useState(null); // Add active input state
   const bottomSheetRef = useRef(null);
   const bottomSheetRef1 = useRef(null);
   const bottomSheetRef2 = useRef(null);
@@ -36,6 +37,11 @@ const home = () => {
   const openLocationModal = (type) => {
     setActiveInput(type); // Set the active input
     handlePresentModalPress2(); // Open the modal
+  };
+
+  const openLocationModal2 = (type) => {
+    setActiveRide(type); // Set the active ride
+    handlePresentModalPress1(); // Open the modal
   };
 
   useEffect(() => {
@@ -170,7 +176,7 @@ const home = () => {
       {(origin || destination) && (
         <LocationSheet
           openModal={handlePresentModalPress}
-          openRideModal={handlePresentModalPress1}
+          openRideModal={(type) => openLocationModal2(type)}
           openLocationModal={(type) => openLocationModal(type)}
         />
       )}
@@ -183,6 +189,7 @@ const home = () => {
       <RidedetailsModal
         ref={bottomSheetRef1}
         setIsRideModalVisible={setIsRideModalVisible} // Pass visibility handler
+        activeRide={activeRide}
       />
 
       <SetSingleLocationModal

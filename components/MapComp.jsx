@@ -1,10 +1,18 @@
-import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+  Image,
+  Animated,
+} from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 const GOOGLE_MAPS_APIKEY = "AIzaSyDEBlZDXMpfgJKt8cUjz2JVTEjYqapwaK0";
 import AvatarImg from "../assets/images/img1.png";
 import { useRouter } from "expo-router";
 import { Avatar } from "@rneui/themed";
+import React, { useEffect, useRef } from "react";
 
 export default function MapComp({
   userLocation,
@@ -15,7 +23,6 @@ export default function MapComp({
   openModal,
 }) {
   const router = useRouter();
-
   return (
     <View
       style={{
@@ -51,7 +58,6 @@ export default function MapComp({
           flex: 1,
         }}
         showsCompass={false}
-        showsUserLocation={origin && destination ? false : true}
         maxZoomLevel={20}
         region={{
           latitude:
@@ -76,8 +82,15 @@ export default function MapComp({
               latitudeDelta: 0.0122,
               longitudeDelta: 0.0421,
             }}
-            pinColor="#3fe0d0"
-          />
+            identifier="origin"
+          >
+            <View style={styles.markerContainer}>
+              <View style={styles.imageContainer}>
+                <Image source={AvatarImg} style={styles.image} />
+              </View>
+              <View style={styles.pinTip} />
+            </View>
+          </Marker>
         )}
         {origin?.location && (
           <Marker
@@ -167,5 +180,30 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "medium", // Use numerical weight for consistency
     fontSize: 16,
+  },
+
+  markerContainer: {
+    alignItems: "center",
+  },
+  imageContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 25, // Circular shape
+    backgroundColor: "white",
+    overflow: "hidden", // Clip image to the circle
+    borderWidth: 2,
+    borderColor: "black",
+    zIndex: 1,
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+  pinTip: {
+    width: 20, // Adjust the width
+    height: 20, // Keep the same as width for a perfect square
+    backgroundColor: "black", // Color of the pin tip
+    transform: [{ rotate: "45deg" }], // Rotate to create a diamond shape
+    marginTop: -16, // Align the tip with the bottom of the circle
   },
 });

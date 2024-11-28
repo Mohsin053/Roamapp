@@ -18,6 +18,8 @@ import { useDispatch } from "react-redux";
 import { setDestination, setOrigin } from "../utils/navSlice";
 import { GoogleSearchInput } from "../components/GoogleSearchInput";
 import { GoogleSearchInputDestination } from "../components/GoogleSeachInputDestination";
+import { RoundedButton } from "../components/RoundedButton";
+import { RecentSearchItem } from "../components/RecentSearchItem";
 
 const SetSingleLocationModal = forwardRef(
   ({ setIsLocationModalVisible, activeInput }, ref) => {
@@ -62,6 +64,7 @@ const SetSingleLocationModal = forwardRef(
           snapPoints={["80%"]}
           onDismiss={handleDismissModal}
           enableDynamicSizing={false}
+          enableContentPanningGesture={false}
         >
           <BottomSheetView style={styles.contentContainer}>
             <Text style={{ ...styles.textstyle, fontSize: 16 }}>
@@ -103,6 +106,37 @@ const SetSingleLocationModal = forwardRef(
                   active={activeInputNow === "origin"}
                 />
               )}
+
+              <BottomSheetScrollView
+                horizontal
+                contentContainerStyle={{ gap: 10 }}
+              >
+                <RoundedButton icon="home" label="Home" onPress={() => {}} />
+                <RoundedButton
+                  icon="briefcase"
+                  label="Office"
+                  onPress={() => {}}
+                />
+                <RoundedButton
+                  icon="location"
+                  label="Main road street"
+                  onPress={() => {}}
+                />
+              </BottomSheetScrollView>
+
+              <BottomSheetView style={styles.recentSearchContainer}>
+                <Text style={styles.recentSearchTitle}>Recent Searches</Text>
+                <BottomSheetView style={{ gap: 24 }}>
+                  {["Bobst Library", "Main Street"].map((title, index) => (
+                    <RecentSearchItem
+                      key={index}
+                      title={title}
+                      subtitle="Newyork - Main road street 2, near..."
+                      onPress={() => {}}
+                    />
+                  ))}
+                </BottomSheetView>
+              </BottomSheetView>
             </BottomSheetView>
 
             {!activeInputNow && (
@@ -139,6 +173,17 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "black",
     fontSize: 16,
+  },
+  recentSearchContainer: {
+    marginTop: 24,
+    backgroundColor: "white",
+    borderRadius: 24,
+    padding: 20,
+    gap: 24,
+  },
+  recentSearchTitle: {
+    color: "black",
+    fontSize: 20,
   },
 });
 

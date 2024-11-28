@@ -1,40 +1,24 @@
-import React, {
-  useRef,
-  forwardRef,
-  useImperativeHandle,
-  useEffect,
-} from "react";
-import {
-  BottomSheetModal,
-  BottomSheetView,
-  BottomSheetModalProvider,
-  BottomSheetScrollView,
-} from "@gorhom/bottom-sheet";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { BlurView } from "expo-blur";
+import { useRef, useEffect } from "react";
 import car from "../assets/images/car.png";
 import AvatarImg from "../assets/images/img1.png";
-import uberlogo from "../assets/images/uberxtext.png";
-import blacklanelogo from "../assets/images/blacklanetext.png";
-import lyftlogo from "../assets/images/lyfttext.png";
 import { Avatar } from "@rneui/themed";
 import { useRouter } from "expo-router";
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+import MapViewDirections from "react-native-maps-directions";
+import { useSelector } from "react-redux";
+import { selectOrigin, selectDestination } from "../utils/navSlice";
+const GOOGLE_MAPS_APIKEY = "AIzaSyDEBlZDXMpfgJKt8cUjz2JVTEjYqapwaK0";
 
 // Reusable RideDetails Component
-const RideDetails = ({ carName, carModel, image, activeRide }) => (
+const RideDetails = ({ carName, carModel, image }) => (
   <View style={styles.carDetails}>
-    <Image
-      source={activeRide}
-      resizeMode="contain"
-      style={{ alignSelf: "center" }}
-    />
     <Text style={styles.carName}>{carName}</Text>
     <Text style={styles.carModel}>{carModel}</Text>
-    <Image
-      source={image}
-      style={{ alignSelf: "center" }}
-      resizeMode="contain"
-    />
+    <Image source={image} style={styles.carImage} resizeMode="contain" />
   </View>
 );
 
@@ -79,114 +63,139 @@ const CostSummary = ({ label, amount }) => (
   </View>
 );
 
-const RidedetailsModal = forwardRef(
-  ({ setIsRideModalVisible, activeRide }, ref) => {
-    const bottomSheetModalRef1 = useRef(null);
-    const router = useRouter();
+export default function RideDetailsScreen() {
+  const router = useRouter();
+  const bottomSheetRef = useRef();
+  const mapref = useRef(null);
+  const origin = useSelector(selectOrigin);
+  const destination = useSelector(selectDestination);
 
-    const handlePresentModalPress1 = () => {
-      bottomSheetModalRef1.current?.present();
-      setIsRideModalVisible(true); // Notify parent that modal is visible
-    };
+  return (
+    <View style={styles.container}>
+      {/* Header and map */}
 
-    const handleDismissModal = () => {
-      setIsRideModalVisible(false); // Notify parent that modal is hidden
-    };
-
-    useImperativeHandle(ref, () => ({
-      handlePresentModalPress1,
-    }));
-
-    const handleDonePress = () => {
-      // Close the modal
-      bottomSheetModalRef1.current?.dismiss();
-      setIsRideModalVisible(false); // Notify parent that the modal is closed
-    };
-
-    return (
-      <BottomSheetModalProvider>
-        <BottomSheetModal
-          ref={bottomSheetModalRef1}
-          snapPoints={["80%"]}
-          onDismiss={handleDismissModal} // Update visibility when dismissed
-          enableDynamicSizing={false}
-          enableHandlePanningGesture={false} // Disable sliding from the handle to dismiss
-          enableContentPanningGesture={false}
+      <View
+        style={{
+          height: "30%",
+        }}
+      >
+        <BlurView intensity={100} tint="light" style={styles.iconButton}>
+          <TouchableOpacity onPress={() => router.back()}>
+            <Ionicons name={"chevron-back"} color={"black"} size={24} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Ride details</Text>
+          <Ionicons name={"chevron-back"} color={"transparent"} size={24} />
+        </BlurView>
+        <MapView
+          provider={PROVIDER_GOOGLE}
+          style={{
+            flex: 1,
+          }}
+          showsCompass={false}
+          maxZoomLevel={20}
+          region={{
+            latitude: origin.location.lat,
+            longitude: origin.location.lng,
+            latitudeDelta: 0.001,
+            longitudeDelta: 0.01,
+          }}
+          ref={mapref}
         >
-          <BottomSheetScrollView
-            style={{ paddingHorizontal: 20 }}
-            contentContainerStyle={{ rowGap: 20, flexGrow: 1 }}
+          {origin && destination && (
+            <>
+              <Marker
+                coordinate={{
+                  latitude: origin.location.lat,
+                  longitude: origin.location.lng,
+                }}
+                description={origin.description}
+                identifier="origin"
+                pinColor="#00A76F"
+              />
+              <MapViewDirections
+                origin={{
+                  latitude: origin.location.lat,
+                  longitude: origin.location.lng,
+                }}
+                destination={{
+                  latitude: destination.location.lat,
+                  longitude: destination.location.lng,
+                }}
+                apikey={GOOGLE_MAPS_APIKEY}
+                strokeWidth={4}
+                strokeColor="black"
+              />
+              <Marker
+                coordinate={{
+                  latitude: destination.location.lat,
+                  longitude: destination.location.lng,
+                }}
+                description={destination.description}
+                identifier="destination"
+                pinColor="#FF4C4C"
+              />
+            </>
+          )}
+        </MapView>
+      </View>
+      {/* Car Details */}
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={["75%"]}
+        enableDynamicSizing={false}
+        backgroundStyle={{
+          borderRadius: 50,
+          backgroundColor: "white",
+          padding: 20,
+        }}
+      >
+        <BottomSheetScrollView
+          style={{ padding: 20 }}
+          contentContainerStyle={{ rowGap: 30, flexGrow: 1 }}
+        >
+          <RideDetails
+            carName="Nissan Patrol"
+            carModel="Washington - White"
+            image={car}
+          />
+          <DriverDetails
+            name="David"
+            rating="4.9 (122)"
+            distance="5 mins away"
+          />
+          <RideSummary
+            from="Bobst Library"
+            to="70 Washington Square ..."
+            time="10:00 AM"
+            color="#54E17B"
+          />
+          <RideSummary
+            from="Bobst Library"
+            to="70 Washington Square ..."
+            time="10:00 AM"
+            color="#F64336"
+          />
+          <View style={styles.separator} />
+
+          {/* Cost Summary */}
+          <CostSummary label="Estimated time travel" amount="15 min" />
+          <CostSummary label="Ride subtotal" amount="$7.89" />
+          <CostSummary label="Tax %" amount="$0.11" />
+          <CostSummary label="Total" amount="$8.00" />
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => router.navigate("paymentmethod")}
           >
-            <RideDetails
-              carName="Nissan Patrol"
-              carModel="Washington - White"
-              image={car}
-              activeRide={activeRide}
-            />
-            <DriverDetails
-              name="David"
-              rating="4.9 (122)"
-              distance="5 mins away"
-            />
-            <RideSummary
-              from="Bobst Library"
-              to="70 Washington Square ..."
-              time="10:00 AM"
-              color="#54E17B"
-            />
-            <RideSummary
-              from="Bobst Library"
-              to="70 Washington Square ..."
-              time="10:00 AM"
-              color="#F64336"
-            />
-            <View style={styles.separator} />
-
-            {/* Cost Summary */}
-            <CostSummary label="Estimated time travel" amount="15 min" />
-            <CostSummary label="Ride subtotal" amount="$7.89" />
-            <CostSummary label="Tax %" amount="$0.11" />
-            <CostSummary label="Total" amount="$8.00" />
-
-            <View style={{ gap: 15 }}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => router.navigate("paymentmethod")}
-              >
-                <Text style={styles.buttonText}>Book now</Text>
-              </TouchableOpacity>
-
-              {/* Button to close modal */}
-              <TouchableOpacity
-                style={[
-                  styles.button,
-                  { backgroundColor: "#FF4D4D", marginBottom: 50 },
-                ]}
-                onPress={handleDonePress} // Dismiss the modal
-              >
-                <Text style={[styles.buttonText, { color: "white" }]}>
-                  Cancel
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </BottomSheetScrollView>
-        </BottomSheetModal>
-      </BottomSheetModalProvider>
-    );
-  }
-);
+            <Text style={styles.buttonText}>Book now</Text>
+          </TouchableOpacity>
+        </BottomSheetScrollView>
+      </BottomSheet>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
-  contentContainer: {
-    flex: 1,
-    backgroundColor: "#f7f7f7",
-    padding: 20,
-  },
-  textstyle: {
-    color: "black",
-    fontWeight: "500",
-    textAlign: "center",
-  },
   iconButton: {
     zIndex: 10,
     position: "absolute",
@@ -225,7 +234,9 @@ const styles = StyleSheet.create({
     fontWeight: "light",
     fontSize: 18,
   },
-  carDetails: { gap: 5 },
+  carDetails: {
+    gap: 10,
+  },
   carName: {
     color: "black",
     fontWeight: "medium",
@@ -335,13 +346,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#3fe0d0",
     alignItems: "center",
     justifyContent: "center",
-  },
-  button1: {
-    height: 58,
-    borderRadius: 100,
-    backgroundColor: "#3fe0d0",
-    alignItems: "center",
-    justifyContent: "center",
     marginBottom: 50,
   },
 
@@ -350,5 +354,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-export default RidedetailsModal;

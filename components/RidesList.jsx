@@ -8,7 +8,6 @@ import {
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 
 export const RidesList = ({
   data,
@@ -19,7 +18,6 @@ export const RidesList = ({
   setShowRides,
   openRideModal,
 }) => {
-  const router = useRouter();
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={[
@@ -84,7 +82,10 @@ export const RidesList = ({
           <Text style={styles.noOptionText}>No Bikes Available</Text>
         )}
       </View>
-      <TouchableOpacity style={styles.chooseButton} onPress={openRideModal}>
+      <TouchableOpacity
+        style={styles.chooseButton}
+        onPress={() => openRideModal(selectedCar?.namepic)}
+      >
         <Text style={styles.chooseButtonText}>Choose {selectedCar?.name}</Text>
       </TouchableOpacity>
     </View>
@@ -94,7 +95,7 @@ export const RidesList = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    padding: 20,
+    padding: 15,
     gap: 15,
   },
   title: {
