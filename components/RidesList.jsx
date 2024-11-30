@@ -11,20 +11,37 @@ import { Ionicons } from "@expo/vector-icons";
 
 export const RidesList = ({
   data,
+  scooterdata,
   selectedCar,
   setSelectedCar,
+  selectedScooter,
+  setSelectedScooter,
   selectedTab,
   setSelectedTab,
   setShowRides,
   openRideModal,
 }) => {
+  // Reusable render function for both cars and scooters
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={[
         styles.carOption,
-        { borderColor: selectedCar?.id === item.id ? "black" : "#f3f3f3" },
+        {
+          borderColor:
+            selectedTab === "Car" && selectedCar?.id === item.id
+              ? "black"
+              : selectedTab === "Scooter" && selectedScooter?.id === item.id
+              ? "black"
+              : "#f3f3f3",
+        },
       ]}
-      onPress={() => setSelectedCar(item)}
+      onPress={() =>
+        selectedTab === "Car"
+          ? setSelectedCar(item)
+          : selectedTab === "Scooter"
+          ? setSelectedScooter(item)
+          : null
+      }
     >
       <Image source={item.image} resizeMode="contain" />
       <View style={styles.carDetails}>
@@ -72,11 +89,16 @@ export const RidesList = ({
             data={data}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
-            styles={{ flex: 1 }}
+            style={{ flex: 1 }}
           />
         )}
         {selectedTab === "Scooter" && (
-          <Text style={styles.noOptionText}>No Scooters Available</Text>
+          <FlatList
+            data={scooterdata}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            style={{ flex: 1 }}
+          />
         )}
         {selectedTab === "Bike" && (
           <Text style={styles.noOptionText}>No Bikes Available</Text>
@@ -84,9 +106,18 @@ export const RidesList = ({
       </View>
       <TouchableOpacity
         style={styles.chooseButton}
-        onPress={() => openRideModal(selectedCar?.namepic)}
+        onPress={() =>
+          openRideModal(selectedTab === "Car" ? selectedCar : selectedScooter)
+        }
       >
-        <Text style={styles.chooseButtonText}>Choose {selectedCar?.name}</Text>
+        <Text style={styles.chooseButtonText}>
+          Choose{" "}
+          {selectedTab === "Car"
+            ? selectedCar?.name
+            : selectedTab === "Scooter"
+            ? selectedScooter?.name
+            : ""}
+        </Text>
       </TouchableOpacity>
     </View>
   );

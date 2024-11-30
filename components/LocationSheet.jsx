@@ -42,7 +42,7 @@ export default function LocationSheet({
       type: "Luxury",
       time: "1:10 pm",
       price: "$98.65",
-      people: 2,
+      people: 1,
       image: require("../assets/images/lyftcar.png"),
     },
     {
@@ -52,12 +52,55 @@ export default function LocationSheet({
       type: "Luxury",
       time: "1:10 pm",
       price: "$98.65",
-      people: 2,
+      people: 1,
       image: require("../assets/images/Blacklanecar.png"),
     },
   ];
 
+  const scooterdata = [
+    {
+      id: "1",
+      name: "Veo",
+      realname: "Cosmo E-bike",
+      namepic: require("../assets/images/veologo.png"),
+      type: "Comfort",
+      color: "black",
+      time: "1:10 pm",
+      price: "$98.65",
+      people: 1,
+      image: require("../assets/images/veoscooter.png"),
+      actualimage: require("../assets/images/veoscooteractual.png"),
+    },
+    {
+      id: "2",
+      name: "Felyx",
+      realname: "Felyx E-Scooter",
+      namepic: require("../assets/images/felyxlogo.png"),
+      type: "Comfort",
+      color: "green",
+      time: "1:10 pm",
+      price: "$98.65",
+      people: 2,
+      image: require("../assets/images/fleyxscooter.png"),
+      actualimage: require("../assets/images/felyxscooteractual.png"),
+    },
+    {
+      id: "3",
+      name: "Spin",
+      realname: "S-200",
+      namepic: require("../assets/images/spinlogo.png"),
+      type: "Luxury",
+      color: "orange",
+      time: "1:10 pm",
+      price: "$98.65",
+      people: 2,
+      image: require("../assets/images/spinscooter.png"),
+      actualimage: require("../assets/images/spinscooteractual.png"),
+    },
+  ];
+
   const [selectedCar, setSelectedCar] = useState(data[0]);
+  const [selectedScooter, setSelectedScooter] = useState(scooterdata[0]);
   const [selectedTab, setSelectedTab] = useState("Car");
 
   useEffect(() => {
@@ -94,6 +137,9 @@ export default function LocationSheet({
           data={data}
           selectedCar={selectedCar}
           setSelectedCar={setSelectedCar}
+          scooterdata={scooterdata}
+          selectedScooter={selectedScooter}
+          setSelectedScooter={setSelectedScooter}
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}
           setShowRides={setShowRides}

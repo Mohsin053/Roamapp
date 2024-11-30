@@ -14,25 +14,24 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import car from "../assets/images/car.png";
 import AvatarImg from "../assets/images/img1.png";
-import uberlogo from "../assets/images/uberxtext.png";
-import blacklanelogo from "../assets/images/blacklanetext.png";
-import lyftlogo from "../assets/images/lyfttext.png";
 import { Avatar } from "@rneui/themed";
 import { useRouter } from "expo-router";
 
 // Reusable RideDetails Component
-const RideDetails = ({ carName, carModel, image, activeRide }) => (
+const RideDetails = ({ carName, image, activeRide }) => (
   <View style={styles.carDetails}>
     <Image
-      source={activeRide}
+      source={activeRide.namepic}
       resizeMode="contain"
       style={{ alignSelf: "center" }}
     />
-    <Text style={styles.carName}>{carName}</Text>
-    <Text style={styles.carModel}>{carModel}</Text>
+    <Text style={styles.carName}>{activeRide.realname || "Nissan Patrol"}</Text>
+    <Text style={styles.carModel}>
+      washington - {activeRide?.color || "white"}
+    </Text>
     <Image
-      source={image}
-      style={{ alignSelf: "center" }}
+      source={activeRide?.actualimage || image}
+      style={styles.carImage}
       resizeMode="contain"
     />
   </View>
@@ -83,7 +82,6 @@ const RidedetailsModal = forwardRef(
   ({ setIsRideModalVisible, activeRide }, ref) => {
     const bottomSheetModalRef1 = useRef(null);
     const router = useRouter();
-
     const handlePresentModalPress1 = () => {
       bottomSheetModalRef1.current?.present();
       setIsRideModalVisible(true); // Notify parent that modal is visible
@@ -119,7 +117,6 @@ const RidedetailsModal = forwardRef(
           >
             <RideDetails
               carName="Nissan Patrol"
-              carModel="Washington - White"
               image={car}
               activeRide={activeRide}
             />
