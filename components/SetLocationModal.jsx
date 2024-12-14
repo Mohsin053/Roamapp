@@ -12,7 +12,7 @@ import {
   BottomSheetModalProvider,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
-const GOOGLE_MAPS_APIKEY = "AIzaSyDEBlZDXMpfgJKt8cUjz2JVTEjYqapwaK0";
+const GOOGLE_MAPS_APIKEY = "AIzaSyB04IlOhapaFKqy27wxdAmOXM_4YcnqchU";
 import { useDispatch } from "react-redux";
 import { setDestination, setOrigin } from "../utils/navSlice";
 import { GoogleSearchInput } from "../components/GoogleSearchInput";

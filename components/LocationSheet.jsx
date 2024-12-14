@@ -11,7 +11,7 @@ import {
 import { RidesList } from "./RidesList"; // Import the RidesList Component
 import { LocationSelection } from "./LocationSelection"; // Import the LocationSelection Component
 
-const GOOGLE_MAPS_APIKEY = "AIzaSyDEBlZDXMpfgJKt8cUjz2JVTEjYqapwaK0";
+const GOOGLE_MAPS_APIKEY = "AIzaSyB04IlOhapaFKqy27wxdAmOXM_4YcnqchU";
 
 export default function LocationSheet({
   openModal,

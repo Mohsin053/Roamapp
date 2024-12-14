@@ -11,7 +11,7 @@ import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useSelector } from "react-redux";
 import { selectOrigin, selectDestination } from "../utils/navSlice";
-const GOOGLE_MAPS_APIKEY = "AIzaSyDEBlZDXMpfgJKt8cUjz2JVTEjYqapwaK0";
+const GOOGLE_MAPS_APIKEY = "AIzaSyB04IlOhapaFKqy27wxdAmOXM_4YcnqchU";
 
 // Reusable RideDetails Component
 const RideDetails = ({ carName, carModel, image }) => (

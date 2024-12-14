@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
-const GOOGLE_MAPS_APIKEY = "AIzaSyDEBlZDXMpfgJKt8cUjz2JVTEjYqapwaK0";
+const GOOGLE_MAPS_APIKEY = "AIzaSyB04IlOhapaFKqy27wxdAmOXM_4YcnqchU";
 import AvatarImg from "../assets/images/img1.png";
 import { useRouter } from "expo-router";
 import { Avatar } from "@rneui/themed";
